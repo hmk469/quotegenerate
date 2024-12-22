@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote of the day</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="quote_box">
+        <h2>Quote of the day</h2>
+        <blockquote id="quote">Loading...</blockquote>
+        <span id="author">Loading...</span>
+        <div>
+            <button id="new-quote">New Quote</button>
+            <button id="tweet-quote"><img src="https://cdn-icons-png.flaticon.com/128/733/733579.png" alt="Twitter">Tweet</button>
+        </div>
+    </div>
+    <script>
+        const quote = document.getElementById("quote");
+        const author = document.getElementById("author");
+        const newQuoteBtn = document.getElementById("new-quote");
+        const api_url = "http://api.quotable.io/random";
+
+        async function getquote(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                quote.innerHTML = data.content;
+                author.innerHTML = data.author;
+            } catch (error) {
+                quote.innerHTML = "An error occurred. Please try again.";
+                author.innerHTML = "";
+                console.error("Error fetching quote: ", error);
+            }
+        }
+
+        newQuoteBtn.addEventListener("click", () => {
+            getquote(api_url);
+        });
+
+        // Initial quote fetch
+        getquote(api_url);
+    </script>
+</body>
+</html>
